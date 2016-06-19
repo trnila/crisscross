@@ -30,7 +30,7 @@ int main() {
 	printf("seed: %d\n", seed);
 	//srand(901720306);
 
-	Board board(40, 20);
+	Board board(35, 20);
 	board.putWord(1, 1, 1, words.at(1));
 
 	std::vector<Word> used;
