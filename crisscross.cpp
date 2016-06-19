@@ -8,6 +8,8 @@
 #include "board.h"
 #include "asciiformat.h"
 
+void printLegend(std::vector<Word> &used);
+
 int main() {
 	std::ifstream in("words");
 	if(!in.is_open()) {
@@ -51,11 +53,24 @@ int main() {
 
 	format(board);
 
-	std::sort(used.begin(), used.end(), [](Word &a, Word &b) {
+	printLegend(used);
+}
+
+void printLegend(std::vector<Word> &used) {
+	sort(used.begin(), used.end(), [](Word &a, Word &b) {
 		return a.size() < b.size();
 	});
+	int current = 0;
 	for(auto word: used) {
+		if(current != word.size()) {
+			if(current != 0) {
+				printf("\n");
+			}
+			printf("%d - ", word.size());
+			current = word.size();
+		} else {
+			printf(", ");
+		}
 		printWord(word);
-		printf("\n");
 	}
 }
