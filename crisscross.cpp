@@ -26,21 +26,21 @@ int main() {
 	srand(seed);
 
 	printf("seed: %d\n", seed);
-//	srand(1493072362);
+	//srand(901720306);
 
-	Board board(10, 10);
+	Board board(40, 20);
 	board.putWord(1, 1, 1, words.at(1));
 
 	std::vector<Word> used;
-	while(used.size() < 5) {
-		Word word = words.at(rand() % 100);
+	while(used.size() < 50) {
+		Word word = words.at(rand() % words.size());
 
 		if(std::find(used.begin(), used.end(), word) != used.end()) {
 			continue;
 		}
 
-		int x = rand() % 10;
-		int y = rand() % 10;
+		int x = rand() % board.getWidth();
+		int y = rand() % board.getHeight();
 		int right = rand() % 2;
 
 		if(board.getScore(x, y, right, word) > 0) {
@@ -50,7 +50,6 @@ int main() {
 	}
 
 	format(board);
-
 
 	std::sort(used.begin(), used.end(), [](Word &a, Word &b) {
 		return a.size() < b.size();
