@@ -19,8 +19,13 @@ Char Board::get(int x, int y) {
 		return 0;
 	}
 
-	return board[x * width + y];
+	return board[x * height + y];
 }
+
+void Board::set(int x, int y, Char c) {
+	board[x * height + y] = c;
+}
+
 
 bool Board::isEmpty(int x, int y) {
 	return get(x, y) == 0;
@@ -31,7 +36,7 @@ bool Board::putWord(int x, int y, bool right, Word word) {
 		assert(get(x, y) == 0 || get(x, y) == word.at(i));
 		assert(x < width && y < height);
 
-		board[x * width + y] = word.at(i);
+		set(x, y, word.at(i));
 
 		if(right) {
 			x++;
@@ -119,16 +124,16 @@ void Board::save(std::ostream &out) {
 void Board::load(std::istream &in) {
 	std::string w;
 
-	int row = 0;
+	int y = 0;
 	while(std::getline(in, w)) {
 		Word word = strToWord(w);
 
-		int col = 0;
+		int x = 0;
 		for(Char c: word) {
-			board[row * width + col] = c == ' ' ? 0 : c;
-			col++;
+			set(x, y, c == ' ' ? 0 : c);
+			x++;
 		}
-		row++;
+		y++;
 	}
 }
 

@@ -27,6 +27,8 @@ private:
 	int height;
 	Char *board;
 
+	void set(int x, int y, Char c);
+
 };
 
 

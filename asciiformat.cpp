@@ -8,7 +8,7 @@ void spaces(int n) {
 }
 
 void format(Board &board) {
-	for (int y = 0; y < board.getHeight(); ++y) {
+	for (int y = 0; y < board.getHeight() + 1; ++y) {
 		for(int c = 0; c < 2; c++) {
 			int lastX = 0;
 			int fix = 0;
