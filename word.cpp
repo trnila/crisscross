@@ -1,16 +1,14 @@
+#include <ostream>
 #include "word.h"
 
-void printChar(Char c) {
+void printChar(Char c, std::ostream& out) {
 	if(c == 0) {
-		printf(" ");
+		out << " ";
 	} else if(c < 0x7F) {
-		printf("%c", c, c);
+		out << (char) c;
 	} else {
-		printf(
-				"%c%c",
-				(0xC0 | ((0x3C0&c)>>6)),
-				0x80 | (0x3F & c)
-		);
+		out << (char) (0xC0 | ((0x3C0&c)>>6))
+		    << (char) (0x80 | (0x3F & c));
 	}
 }
 

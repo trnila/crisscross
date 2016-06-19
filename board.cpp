@@ -1,10 +1,13 @@
 
 #include <assert.h>
 #include <cstdio>
+#include <iostream>
+#include <cstring>
 #include "board.h"
 
 Board::Board(int width, int height) : width(width), height(height) {
 	board = new Char[width * height];
+	memset(board, 0, width * height * sizeof(Char));
 }
 
 Board::~Board() {
@@ -100,4 +103,42 @@ void Board::print() {
 		}
 		printf("\n");
 	}
+}
+
+void Board::save(std::ostream &out) {
+	out << getWidth() << '\n' << getHeight() << '\n';
+
+	for(int y = 0; y < height; y++) {
+		for(int x = 0; x < width; x++) {
+			printChar(get(x, y), out);
+		}
+		out << '\n';
+	}
+}
+
+void Board::load(std::istream &in) {
+	std::string w;
+
+	int row = 0;
+	while(std::getline(in, w)) {
+		Word word = strToWord(w);
+
+		int col = 0;
+		for(Char c: word) {
+			board[row * width + col] = c == ' ' ? 0 : c;
+			col++;
+		}
+		row++;
+	}
+}
+
+Board Board::createFrom(std::istream &in) {
+	int width, height;
+	in >> width >> height;
+	in.ignore();
+
+	Board b(width, height);
+	b.load(in);
+
+	return b;
 }

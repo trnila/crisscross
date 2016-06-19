@@ -6,9 +6,7 @@
 #include <stdlib.h>
 #include "word.h"
 #include "board.h"
-
-
-void format(Board &board);
+#include "asciiformat.h"
 
 int main() {
 	std::ifstream in("words");
@@ -52,6 +50,7 @@ int main() {
 	}
 
 	format(board);
+
 
 	std::sort(used.begin(), used.end(), [](Word &a, Word &b) {
 		return a.size() < b.size();
