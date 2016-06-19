@@ -51,11 +51,11 @@ int Board::getScore(int x, int y, bool right, Word word) {
 		return -1;
 	}
 
-	if(right && (!isEmpty(x - 1, y) || !isEmpty(x + word.size() + 1, y))) {
+	if(right && (!isEmpty(x - 1, y) || !isEmpty(x + word.size(), y))) {
 		return -1;
 	}
 
-	if(!right && (!isEmpty(x, y - 1) || !isEmpty(x, y + word.size() + 1))) {
+	if(!right && (!isEmpty(x, y - 1) || !isEmpty(x, y + word.size()))) {
 		return -1;
 	}
 
