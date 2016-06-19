@@ -59,7 +59,8 @@ void format(Board &board) {
 					} else if(c == 1) {
 						spaces((x - lastX)*2 - fix);
 						printf("│");
-						printChar(board.get(x, y));
+						//printChar(board.get(x, y));
+						printf(" ");
 
 						if(board.isEmpty(x + 1, y)) {
 							printf("│");
@@ -67,8 +68,6 @@ void format(Board &board) {
 						}
 						lastX = x+1;
 					}
-
-					//printChar(board.get(j, i));
 				} else {
 					if(c == 0 && y != 0) {
 						if(!board.isEmpty(x, y - 1)) {
@@ -95,7 +94,10 @@ void format(Board &board) {
 					}
 				}
 			}
-			printf("\n");
+
+			if(y < board.getHeight()) {
+				printf("\n");
+			}
 		}
 	}
 
