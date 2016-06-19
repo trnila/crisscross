@@ -112,6 +112,12 @@ void placeWord(int x, int y, bool right, std::vector<Char> word) {
 	}
 }
 
+void spaces(int n) {
+	for(int i = 0; i < n; i++) {
+		printf(" ");
+	}
+}
+
 int main() {
 	std::ifstream in("words");
 
@@ -152,7 +158,7 @@ int main() {
 	board[5][4]=chars[0];*/
 
 	srand(6);
-	//srand(time(0));
+	srand(time(0));
 	int placed = 0;
 
 	placeWord(1, 1, 1, words.at(1));
@@ -183,15 +189,23 @@ int main() {
 
 
 	for (int y = 0; y < N; ++y) {
-		for(int c = 0; c < 3; c++) {
+		for(int c = 0; c < 2; c++) {
+			int lastX = 0;
 			for (int x = 0; x < N; ++x) {
 				if(board[x][y] != 0) {
 					if(c == 0) {
 						if(isFree(x - 1, y)) {
+							spaces((x - lastX)*2-1);
 							if(isFree(x, y - 1)) {
-								printf("┌");
+								if(isFree(x - 1, y - 1)) {
+									printf("┌");
+								}
 							} else {
-								printf("├");
+								if(isFree(x - 1, y - 1)) {
+									printf("├");
+								} else {
+									printf("┼");
+								}
 							}
 						} else {
 							if(isFree(x, y - 1)) {
@@ -207,52 +221,49 @@ int main() {
 							if(isFree(x, y - 1)) {
 								printf("┐");
 							} else {
-								printf("┤");
+								if(!isFree(x + 1, y - 1)) {
+									printf("┼");
+								} else {
+									printf("┤");
+								}
 							}
-						} else {
-							if(isFree(x, y - 1)) {
-								printf("┬");
-							} else {
-								printf("┼");
-							}
+							lastX = x + 1;
 						}
 					} else if(c == 1) {
-						printf("│ │");
-					} else if(c == 2) {
-						if(isFree(x - 1, y)) {
-							if(isFree(x, y + 1)) {
-								printf("└");
-							} else {
-								printf("├");
-							}
-						} else {
-							if(isFree(x, y + 1)) {
-								printf("┴");
-							} else {
-								printf("┼");
-							}
-						}
-
-						printf("─");
+						spaces((x - lastX)*2 - 1);
+						printf("│");
+						printChar(board[x][y]);
 
 						if(isFree(x + 1, y)) {
-							if(isFree(x, y + 1)) {
-								printf("┘");
-							} else {
-								printf("┤");
-							}
-						} else {
-							if(isFree(x, y + 1)) {
-								printf("┴");
-							} else {
-								printf("┼");
-							}
+							printf("│");
 						}
+						lastX = x+1;
 					}
 
 					//printChar(board[j][i]);
 				} else {
-					printf("   ");
+					if(c == 0 && y != 0) {
+						if(!isFree(x, y - 1)) {
+							spaces((x - lastX)*2 - 1);
+							if(isFree(x - 1, y - 1)) {
+								printf("└");
+							}
+							printf("─");
+
+							if(isFree(x + 1, y - 1)) {
+								if(isFree(x + 1, y)) {
+									printf("┘");
+								} else {
+									printf("┼");
+								}
+							} else if(isFree(x + 1, y)) {
+								printf("┴");
+							}
+
+
+							lastX = x+1;
+						}
+					}
 				}
 			}
 			printf("\n");
