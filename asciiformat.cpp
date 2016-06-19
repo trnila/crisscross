@@ -40,7 +40,12 @@ void format(Board &board) {
 
 						if(board.isEmpty(x + 1, y)) {
 							if(board.isEmpty(x, y - 1)) {
-								printf("┐");
+								if(!board.isEmpty(x + 1, y - 1)) {
+									printf("┼");
+								} else {
+									printf("┐");
+								}
+								fix = 1;
 							} else {
 								if(!board.isEmpty(x + 1, y - 1)) {
 									printf("┼");
@@ -68,7 +73,7 @@ void format(Board &board) {
 					if(c == 0 && y != 0) {
 						if(!board.isEmpty(x, y - 1)) {
 							spaces((x - lastX)*2 - fix);
-							if(board.isEmpty(x - 1, y - 1)) {
+							if(board.isEmpty(x - 1, y - 1) && board.isEmpty(x - 1, y)) {
 								printf("└");
 							}
 							printf("─");
