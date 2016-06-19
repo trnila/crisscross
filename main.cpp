@@ -2,6 +2,7 @@
 #include <vector>
 #include <fstream>
 #include <set>
+#include <algorithm>
 #include <assert.h>
 
 typedef uint32_t Char;
@@ -25,10 +26,9 @@ void printWord(std::vector<Char> word) {
 	for(int i = 0; i < word.size(); i++) {
 		printChar(word.at(i));
 	}
-	printf("\n");
 }
 
-const int N = 20;
+const int N = 10;
 Char board[N][N];
 
 std::vector<std::vector<Char>> words;
@@ -151,18 +151,18 @@ int main() {
 
 	board[5][4]=chars[0];*/
 
-	srand(5);
-	srand(time(0));
+	srand(6);
+	//srand(time(0));
 	int placed = 0;
 
-	placeWord(5, 8, 1, words.at(39));
+	placeWord(1, 1, 1, words.at(1));
 
-	std::set<std::vector<Char>> used;
+	std::vector<std::vector<Char>> used;
 
-	while(placed < 15) {
+	while(placed < 5) {
 		std::vector<Char> word = words.at(rand() % 100);
 
-		if(used.find(word) != used.end()) {
+		if(std::find(used.begin(), used.end(), word) != used.end()) {
 			continue;
 		}
 
@@ -175,9 +175,95 @@ int main() {
 			placeWord(x, y, right, word);
 			//printWord(word);
 			placed++;
-			used.insert(word);
-
-			printTable();
+			used.push_back(word);
 		}
+	}
+
+	printTable();
+
+
+	for (int y = 0; y < N; ++y) {
+		for(int c = 0; c < 3; c++) {
+			for (int x = 0; x < N; ++x) {
+				if(board[x][y] != 0) {
+					if(c == 0) {
+						if(isFree(x - 1, y)) {
+							if(isFree(x, y - 1)) {
+								printf("┌");
+							} else {
+								printf("├");
+							}
+						} else {
+							if(isFree(x, y - 1)) {
+								printf("┬");
+							} else {
+								printf("┼");
+							}
+						}
+
+						printf("─");
+
+						if(isFree(x + 1, y)) {
+							if(isFree(x, y - 1)) {
+								printf("┐");
+							} else {
+								printf("┤");
+							}
+						} else {
+							if(isFree(x, y - 1)) {
+								printf("┬");
+							} else {
+								printf("┼");
+							}
+						}
+					} else if(c == 1) {
+						printf("│ │");
+					} else if(c == 2) {
+						if(isFree(x - 1, y)) {
+							if(isFree(x, y + 1)) {
+								printf("└");
+							} else {
+								printf("├");
+							}
+						} else {
+							if(isFree(x, y + 1)) {
+								printf("┴");
+							} else {
+								printf("┼");
+							}
+						}
+
+						printf("─");
+
+						if(isFree(x + 1, y)) {
+							if(isFree(x, y + 1)) {
+								printf("┘");
+							} else {
+								printf("┤");
+							}
+						} else {
+							if(isFree(x, y + 1)) {
+								printf("┴");
+							} else {
+								printf("┼");
+							}
+						}
+					}
+
+					//printChar(board[j][i]);
+				} else {
+					printf("   ");
+				}
+			}
+			printf("\n");
+		}
+	}
+
+	std::sort(used.begin(), used.end(), [](std::vector<Char> &a, std::vector<Char> &b) {
+		return a.size() < b.size();
+	});
+	for(auto word: used) {
+		printWord(word);
+		printf("\n");
 	}
 }
