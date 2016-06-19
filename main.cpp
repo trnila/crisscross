@@ -157,8 +157,13 @@ int main() {
 
 	board[5][4]=chars[0];*/
 
-	srand(6);
-	srand(time(0));
+	srand(time(NULL));
+	int seed = rand();
+	srand(seed);
+
+	printf("seed: %d\n", seed);
+//	srand(1493072362);
+
 	int placed = 0;
 
 	placeWord(1, 1, 1, words.at(1));
@@ -191,11 +196,12 @@ int main() {
 	for (int y = 0; y < N; ++y) {
 		for(int c = 0; c < 2; c++) {
 			int lastX = 0;
+			int fix = 0;
 			for (int x = 0; x < N; ++x) {
 				if(board[x][y] != 0) {
 					if(c == 0) {
 						if(isFree(x - 1, y)) {
-							spaces((x - lastX)*2-1);
+							spaces((x - lastX)*2 - fix);
 							if(isFree(x, y - 1)) {
 								if(isFree(x - 1, y - 1)) {
 									printf("┌");
@@ -208,7 +214,7 @@ int main() {
 								}
 							}
 						} else {
-							if(isFree(x, y - 1)) {
+							if(isFree(x - 1, y - 1) && isFree(x, y - 1) && !isFree(x - 1, y)) {
 								printf("┬");
 							} else {
 								printf("┼");
@@ -225,17 +231,19 @@ int main() {
 									printf("┼");
 								} else {
 									printf("┤");
+									fix = 1;
 								}
 							}
 							lastX = x + 1;
 						}
 					} else if(c == 1) {
-						spaces((x - lastX)*2 - 1);
+						spaces((x - lastX)*2 - fix);
 						printf("│");
 						printChar(board[x][y]);
 
 						if(isFree(x + 1, y)) {
 							printf("│");
+							fix = 1;
 						}
 						lastX = x+1;
 					}
@@ -244,7 +252,7 @@ int main() {
 				} else {
 					if(c == 0 && y != 0) {
 						if(!isFree(x, y - 1)) {
-							spaces((x - lastX)*2 - 1);
+							spaces((x - lastX)*2 - fix);
 							if(isFree(x - 1, y - 1)) {
 								printf("└");
 							}
@@ -253,6 +261,7 @@ int main() {
 							if(isFree(x + 1, y - 1)) {
 								if(isFree(x + 1, y)) {
 									printf("┘");
+									fix = 1;
 								} else {
 									printf("┼");
 								}
