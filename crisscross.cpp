@@ -43,8 +43,8 @@ int main(int argc, char **argv) {
   int max_words = 20;
   int auxilary_letters = 0;
 
-	char ch;
-	while ((ch = getopt_long(argc, argv, "pf:r:c:m:a:", long_options, nullptr)) != -1) {
+	unsigned char ch;
+	while ((ch = getopt_long(argc, argv, "pf:r:c:m:a:", long_options, nullptr)) != 255) {
 		switch(ch) {
 			case 'p':
 				print_solution = true;
@@ -107,7 +107,6 @@ int main(int argc, char **argv) {
 	srand(seed);
 
 	printf("seed: %d\n", seed);
-	//srand(901720306);
 
 	Board board(cols, rows);
 	board.putWord(1, 1, 1, words.at(1));
