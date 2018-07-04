@@ -17,11 +17,12 @@ struct option long_options[] = {
   {"rows", required_argument, NULL, 'r'},
   {"cols", required_argument, NULL, 'c'},
   {"max-words", required_argument, NULL, 'm'},
+  {"aux-letters", required_argument, NULL, 'a'},
 	{nullptr, 0, nullptr, 0}
 };
 
 void show_help(int argc, char **argv) {
-  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html] [-c|--cols num] [-r|--rows num] [-m|--max-words num]\n", argv[0]);
+  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html] [-c|--cols num] [-r|--rows num] [-m|--max-words num] [-a|--auxilary_letters num]\n", argv[0]);
 }
 
 int to_int(const char* str, int* val) {
@@ -40,9 +41,10 @@ int main(int argc, char **argv) {
 	void (*formatter)(const Board&, const std::vector<Word>&, bool) = ascii_format;
   int rows = 40, cols = 40;
   int max_words = 20;
+  int auxilary_letters = 0;
 
 	char ch;
-	while ((ch = getopt_long(argc, argv, "pf:r:c:m:", long_options, nullptr)) != -1) {
+	while ((ch = getopt_long(argc, argv, "pf:r:c:m:a:", long_options, nullptr)) != -1) {
 		switch(ch) {
 			case 'p':
 				print_solution = true;
@@ -75,6 +77,13 @@ int main(int argc, char **argv) {
           exit(1);
         }
         break;
+      case 'a':
+        if(!to_int(optarg, &auxilary_letters) || auxilary_letters <= 0) {
+          fprintf(stderr, "auxilary_letters must be positive integer\n");
+          exit(1);
+        }
+        break;
+
       default:
         show_help(argc, argv);
         exit(1);
@@ -120,6 +129,7 @@ int main(int argc, char **argv) {
 			used.push_back(word);
 		}
 	}
+  board.fillAuxilaries(auxilary_letters);
 
 	formatter(board, used, print_solution);
 }

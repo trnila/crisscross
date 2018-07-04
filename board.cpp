@@ -7,23 +7,33 @@
 
 Board::Board(int width, int height) : width(width), height(height) {
 	board = new Char[width * height];
+  auxilary = new bool[width * height];
 	memset(board, 0, width * height * sizeof(Char));
+  memset(auxilary, 0, width * height);
 }
 
 Board::~Board() {
 	delete[] board;
 }
 
-Char Board::get(int x, int y) const {
+int Board::index(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) {
-		return 0;
-	}
+    return -1;
+  }
+	return x * height + y;
+}
 
-	return board[x * height + y];
+Char Board::get(int x, int y) const {
+  int i = index(x, y);
+  if(i < 0) {
+    return 0;
+  }
+
+	return board[i];
 }
 
 void Board::set(int x, int y, Char c) {
-	board[x * height + y] = c;
+	board[index(x, y)] = c;
 }
 
 
@@ -146,4 +156,25 @@ Board Board::createFrom(std::istream &in) {
 	b.load(in);
 
 	return b;
+}
+
+void Board::fillAuxilaries(int count) {
+  while(count > 0) {
+    int x = rand() % width;
+    int y = rand() % height;
+
+    if(!isEmpty(x, y) && !auxilary[index(x, y)]) {
+      auxilary[index(x, y)] = true;
+      count--;
+    }
+  }
+}
+
+bool Board::canHint(int x, int y) const {
+  int i = index(x, y);
+  if(i < 0) {
+    return false;
+  }
+
+  return auxilary[i];
 }
