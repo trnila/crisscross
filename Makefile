@@ -1,9 +1,13 @@
 CC = g++
+COMMON=board.o \
+			 word.o \
+			 asciiformat.o \
+			 htmlformat.o
 
 all: crisscross formatter
 
-crisscross: crisscross.o board.o word.o asciiformat.o
-formatter: formatter.o board.o word.o asciiformat.o
+crisscross: crisscross.o $(COMMON)
+formatter: formatter.o $(COMMON)
 
 crisscross.pdf: all
 	./crisscross | paps > crisscross.ps

@@ -9,41 +9,69 @@
 #include "word.h"
 #include "board.h"
 #include "asciiformat.h"
-
-void printLegend(std::vector<Word> &used);
+#include "htmlformat.h"
 
 struct option long_options[] = {
 	{"print-solution", no_argument, nullptr, 'p'},
 	{"formatter", required_argument, NULL, 'f'},
+  {"rows", required_argument, NULL, 'r'},
+  {"cols", required_argument, NULL, 'c'},
+  {"max-words", required_argument, NULL, 'm'},
 	{nullptr, 0, nullptr, 0}
 };
 
-enum class Formatter {
-	ASCII,
-	HTML
-};
-
 void show_help(int argc, char **argv) {
-  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html]\n", argv[0]);
+  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html] [-c|--cols num] [-r|--rows num] [-m|--max-words num]\n", argv[0]);
+}
+
+int to_int(const char* str, int* val) {
+	char* end;
+	int result = strtol(str, &end, 10);
+	if(str + strlen(str) != end) {
+		return 0;
+	}
+
+	*val = result;
+	return 1;
 }
 
 int main(int argc, char **argv) {
 	bool print_solution = false;
-	Formatter choosed_formatter = Formatter::ASCII;
+	void (*formatter)(const Board&, const std::vector<Word>&, bool) = ascii_format;
+  int rows = 40, cols = 40;
+  int max_words = 20;
 
 	char ch;
-	while ((ch = getopt_long(argc, argv, "pf:", long_options, NULL)) != -1) {
+	while ((ch = getopt_long(argc, argv, "pf:r:c:m:", long_options, nullptr)) != -1) {
 		switch(ch) {
 			case 'p':
 				print_solution = true;
 				break;
 			case 'f':
 				if(strcmp("html", optarg) == 0) {
-          choosed_formatter = Formatter::HTML;
+          formatter = html_format;
 				} else if(strcmp("ascii", optarg) == 0) {
-          choosed_formatter = Formatter::ASCII;
+          formatter = ascii_format;
         } else {
           fprintf(stderr, "Unknown formatter '%s'\n", optarg);
+          exit(1);
+        }
+        break;
+      case 'r':
+        if(!to_int(optarg, &rows) || rows <= 0) {
+          fprintf(stderr, "rows must be positive integer\n");
+          exit(1);
+        }
+        break;
+      case 'c':
+        if(!to_int(optarg, &cols) || cols <= 0) {
+          fprintf(stderr, "cols must be positive integer\n");
+          exit(1);
+        }
+        break;
+      case 'm':
+        if(!to_int(optarg, &max_words) || max_words <= 0) {
+          fprintf(stderr, "max-words must be positive integer\n");
           exit(1);
         }
         break;
@@ -52,7 +80,6 @@ int main(int argc, char **argv) {
         exit(1);
 		}
 	}
-
 
 	std::ifstream in("words");
 	if(!in.is_open()) {
@@ -73,11 +100,11 @@ int main(int argc, char **argv) {
 	printf("seed: %d\n", seed);
 	//srand(901720306);
 
-	Board board(35, 20);
+	Board board(cols, rows);
 	board.putWord(1, 1, 1, words.at(1));
 
 	std::vector<Word> used;
-	while(used.size() < 50) {
+	while(used.size() < max_words) {
 		Word word = words.at(rand() % words.size());
 
 		if(std::find(used.begin(), used.end(), word) != used.end()) {
@@ -94,26 +121,5 @@ int main(int argc, char **argv) {
 		}
 	}
 
-	ascii_format(board, print_solution);
-
-	printLegend(used);
-}
-
-void printLegend(std::vector<Word> &used) {
-	sort(used.begin(), used.end(), [](Word &a, Word &b) {
-		return a.size() < b.size();
-	});
-	int current = 0;
-	for(auto word: used) {
-		if(current != word.size()) {
-			if(current != 0) {
-				printf("\n");
-			}
-			printf("%d - ", word.size());
-			current = word.size();
-		} else {
-			printf(", ");
-		}
-		printWord(word);
-	}
+	formatter(board, used, print_solution);
 }

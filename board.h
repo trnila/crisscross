@@ -9,8 +9,8 @@ public:
 
 	static Board createFrom(std::istream &in);
 
-	Char get(int x, int y);
-	bool isEmpty(int x, int y);
+	Char get(int x, int y) const;
+	bool isEmpty(int x, int y) const;
 
 	bool putWord(int x, int y, bool right, Word word);
 	int getScore(int x, int y, bool right, Word word);

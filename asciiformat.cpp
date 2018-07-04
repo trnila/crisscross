@@ -1,13 +1,30 @@
 #include <cstdio>
+#include <algorithm>
 #include "board.h"
 
-void spaces(int n) {
+static void spaces(int n) {
 	for(int i = 0; i < n; i++) {
 		printf(" ");
 	}
 }
 
-void ascii_format(Board &board, bool print_solution) {
+static void print_legend(std::vector<Word> &used) {
+	int current = 0;
+	for(auto word: used) {
+		if(current != word.size()) {
+			if(current != 0) {
+				printf("\n");
+			}
+			printf("%d - ", word.size());
+			current = word.size();
+		} else {
+			printf(", ");
+		}
+		printWord(word);
+	}
+}
+
+void ascii_format(const Board &board, const std::vector<Word> &used, bool print_solution) {
 	for (int y = 0; y < board.getHeight() + 1; ++y) {
 		for(int c = 0; c < 2; c++) {
 			int lastX = 0;

@@ -14,7 +14,7 @@ Board::~Board() {
 	delete[] board;
 }
 
-Char Board::get(int x, int y) {
+Char Board::get(int x, int y) const {
 	if(x < 0 || x >= width || y < 0 || y >= height) {
 		return 0;
 	}
@@ -27,7 +27,7 @@ void Board::set(int x, int y, Char c) {
 }
 
 
-bool Board::isEmpty(int x, int y) {
+bool Board::isEmpty(int x, int y) const {
 	return get(x, y) == 0;
 }
 

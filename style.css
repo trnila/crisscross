@@ -1,0 +1,39 @@
+@page {
+  size: A4;
+  margin: 0;
+}
+
+@media print {
+  body {
+    border: 0 !important;
+  }
+}
+
+html, body {
+  width: 210mm;
+  height: 297mm;
+}
+
+
+body {
+  border: 1px solid black;
+  padding: 10px;
+}
+
+table {
+  border-collapse: collapse;
+  margin-bottom: 10px;
+  table-layout: fixed;
+}
+
+td {
+  height: 23px;
+  min-width: 23px;
+  padding: 0;
+}
+
+td.cell {
+  border: 1px solid black;
+  text-align: center;
+  background: #e4e4e4;
+}

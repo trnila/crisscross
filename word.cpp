@@ -1,4 +1,5 @@
 #include <ostream>
+#include <sstream>
 #include "word.h"
 
 void printChar(Char c, std::ostream& out) {
@@ -10,6 +11,12 @@ void printChar(Char c, std::ostream& out) {
 		out << (char) (0xC0 | ((0x3C0&c)>>6))
 		    << (char) (0x80 | (0x3F & c));
 	}
+}
+
+std::string utfchar2str(Char c) {
+  std::ostringstream out;
+  printChar(c, out);
+  return out.str();
 }
 
 void printWord(Word word) {
