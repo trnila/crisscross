@@ -24,7 +24,8 @@ static void print_legend(const std::vector<Word> &used_words) {
 }
 
 void html_format(const Board &board, const std::vector<Word> &used, bool print_solution) {
-/*  FILE *f = fopen("style.css", "r");
+  std::cout << "<html><head><meta charset=utf-8>";
+  FILE *f = fopen("style.css", "r");
   if(f) {
     char buffer[1];
     size_t r;
@@ -34,16 +35,8 @@ void html_format(const Board &board, const std::vector<Word> &used, bool print_s
     }
     printf("</style>");
   }
-  */
 
-  std::cout << "<html>"
-              << "<head>"
-                << "<meta charset=utf-8>"
-                << "<link rel='stylesheet' href='style.css'>"
-              << "</head>"
-              << "<body>";
-
-  std::cout << "<table>";
+  std::cout << "</head><body><table>";
   for(int r = 0; r < board.getHeight(); r++) {
     std::cout << "<tr>";
     for(int c = 0; c < board.getWidth(); c++) {
