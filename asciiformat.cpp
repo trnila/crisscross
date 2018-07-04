@@ -7,7 +7,7 @@ void spaces(int n) {
 	}
 }
 
-void format(Board &board) {
+void ascii_format(Board &board, bool print_solution) {
 	for (int y = 0; y < board.getHeight() + 1; ++y) {
 		for(int c = 0; c < 2; c++) {
 			int lastX = 0;
@@ -59,8 +59,11 @@ void format(Board &board) {
 					} else if(c == 1) {
 						spaces((x - lastX)*2 - fix);
 						printf("│");
-						//printChar(board.get(x, y));
-						printf(" ");
+            if(print_solution) {
+  						printChar(board.get(x, y));
+            } else {
+  						printf(" ");
+            }
 
 						if(board.isEmpty(x + 1, y)) {
 							printf("│");

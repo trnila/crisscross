@@ -7,6 +7,6 @@ int main() {
 	Board board = Board::createFrom(std::cin);
 
 	//board.print();
-	format(board);
+	ascii_format(board, true);
 	return 0;
 }

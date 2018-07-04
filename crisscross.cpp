@@ -4,13 +4,56 @@
 #include <set>
 #include <algorithm>
 #include <stdlib.h>
+#include <getopt.h>
+#include <cstring>
 #include "word.h"
 #include "board.h"
 #include "asciiformat.h"
 
 void printLegend(std::vector<Word> &used);
 
-int main() {
+struct option long_options[] = {
+	{"print-solution", no_argument, nullptr, 'p'},
+	{"formatter", required_argument, NULL, 'f'},
+	{nullptr, 0, nullptr, 0}
+};
+
+enum class Formatter {
+	ASCII,
+	HTML
+};
+
+void show_help(int argc, char **argv) {
+  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html]\n", argv[0]);
+}
+
+int main(int argc, char **argv) {
+	bool print_solution = false;
+	Formatter choosed_formatter = Formatter::ASCII;
+
+	char ch;
+	while ((ch = getopt_long(argc, argv, "pf:", long_options, NULL)) != -1) {
+		switch(ch) {
+			case 'p':
+				print_solution = true;
+				break;
+			case 'f':
+				if(strcmp("html", optarg) == 0) {
+          choosed_formatter = Formatter::HTML;
+				} else if(strcmp("ascii", optarg) == 0) {
+          choosed_formatter = Formatter::ASCII;
+        } else {
+          fprintf(stderr, "Unknown formatter '%s'\n", optarg);
+          exit(1);
+        }
+        break;
+      default:
+        show_help(argc, argv);
+        exit(1);
+		}
+	}
+
+
 	std::ifstream in("words");
 	if(!in.is_open()) {
 		printf("Could not open dictionary!");
@@ -51,7 +94,7 @@ int main() {
 		}
 	}
 
-	format(board);
+	ascii_format(board, print_solution);
 
 	printLegend(used);
 }

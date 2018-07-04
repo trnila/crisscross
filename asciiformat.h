@@ -1,3 +1,3 @@
 #pragma once
 
-void format(Board &board);
+void ascii_format(Board &board, bool print_solution);
