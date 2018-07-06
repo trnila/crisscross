@@ -18,14 +18,15 @@ struct option long_options[] = {
   {"cols", required_argument, NULL, 'c'},
   {"max-words", required_argument, NULL, 'm'},
   {"aux-letters", required_argument, NULL, 'a'},
+  {"seed", required_argument, NULL, 's'},
 	{nullptr, 0, nullptr, 0}
 };
 
 void show_help(int argc, char **argv) {
-  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html] [-c|--cols num] [-r|--rows num] [-m|--max-words num] [-a|--auxilary_letters num]\n", argv[0]);
+  fprintf(stderr, "Usage: %s [-p|--print-solution] [-f|--format ascii|html] [-c|--cols num] [-r|--rows num] [-m|--max-words num] [-a|--auxilary_letters num] [-s|seed num]\n", argv[0]);
 }
 
-int to_int(const char* str, int* val) {
+bool to_int(const char* str, int* val) {
 	char* end;
 	int result = strtol(str, &end, 10);
 	if(str + strlen(str) != end) {
@@ -42,9 +43,10 @@ int main(int argc, char **argv) {
   int rows = 40, cols = 40;
   int max_words = 20;
   int auxilary_letters = 0;
+	int seed = rand();
 
 	unsigned char ch;
-	while ((ch = getopt_long(argc, argv, "pf:r:c:m:a:", long_options, nullptr)) != 255) {
+	while ((ch = getopt_long(argc, argv, "pf:r:c:m:a:s:", long_options, nullptr)) != 255) {
 		switch(ch) {
 			case 'p':
 				print_solution = true;
@@ -83,6 +85,12 @@ int main(int argc, char **argv) {
           exit(1);
         }
         break;
+      case 's':
+        if(!to_int(optarg, &seed)) {
+          fprintf(stderr, "seed must be integer\n");
+          exit(1);
+        }
+        break;
 
       default:
         show_help(argc, argv);
@@ -102,10 +110,7 @@ int main(int argc, char **argv) {
 		words.push_back(strToWord(w));
 	}
 
-	srand(time(NULL));
-	int seed = rand();
 	srand(seed);
-
 	printf("seed: %d\n", seed);
 
 	Board board(cols, rows);

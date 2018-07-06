@@ -43,7 +43,7 @@ void html_format(const Board &board, const std::vector<Word> &used, bool print_s
       std::cout << "<td"
                   << (board.isEmpty(c, r) ? "" : " class='cell'")
                   << ">"
-                  << (board.canHint(c, r) ? utfchar2str(board.get(c, r)).c_str() : " ")
+                  << (board.canHint(c, r) || print_solution ? utfchar2str(board.get(c, r)).c_str() : " ")
                   << "</td>";
     }
     std::cout << "</tr>";
