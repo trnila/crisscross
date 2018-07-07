@@ -114,8 +114,6 @@ int main(int argc, char **argv) {
 	printf("seed: %d\n", seed);
 
 	Board board(cols, rows);
-	board.putWord(1, 1, 1, words.at(1));
-
 	std::vector<Word> used;
 	while(used.size() < max_words) {
 		Word word = words.at(rand() % words.size());
