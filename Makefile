@@ -1,5 +1,5 @@
 CC = g++
-CCFLAGS=-g
+CXXFLAGS=-g
 COMMON=board.o \
 			 word.o \
 			 asciiformat.o \
