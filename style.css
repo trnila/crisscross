@@ -38,3 +38,39 @@ td.cell {
   text-align: center;
   background: #e4e4e4;
 }
+
+/*
+dd:after {
+  content: "";
+  display: block;
+}
+
+dt {
+  text-align: right;
+  display: inline-block;
+  width: 20px;
+  font-weight: bold;
+}
+
+dd {
+  display: inline;
+  -webkit-margin-start: 0px;
+}
+*/
+
+dl {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+
+dt {
+  grid-column-start: 1;
+  text-align: right;
+  font-weight: bold;
+}
+
+dd {
+  grid-column-start: 2;
+  -webkit-margin-start: 5px;
+}
+
