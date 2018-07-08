@@ -8,10 +8,14 @@ class Puzzle:
         self.word_dict = words
         self.rows = rows
         self.cols = cols
+        self.total_words = total_words
 
         self.grid = [[EMPTY] * cols for i in range(0, rows)]
         self.words = []
 
+        self._generate()
+
+    def _generate(self):
         random.shuffle(self.word_dict)
         dirs = [[1, 0], [0, 1]]
 
@@ -19,39 +23,14 @@ class Puzzle:
         for w in self.word_dict:
             available = []
 
-            for r in range(0, rows):
-                for c in range(0, cols):
+            for r in range(0, self.rows):
+                for c in range(0, self.cols):
                     for d in dirs:
-                        if self.get(r - d[0], c - d[1]) != EMPTY:
-                            continue
-                        if self.get(r + len(w) * d[0] + d[0], c + len(w) * d[1] + d[1]) != EMPTY:
-                            continue
-
-                        score = 0
-                        for i, l in enumerate(w):
-                            x = r + i * d[0]
-                            y = c + i * d[1]
-                            cell = self.get(x, y)
-                            score += 1
-
-                            if cell != EMPTY and cell != l:
-                                score = 0
-                                break
-
-                            if self.get(x + d[1], y + d[0]) != EMPTY or self.get(x - d[1], y - d[0]) != EMPTY:
-                                if cell == EMPTY:
-                                    score = 0
-                                    break
-                                else:
-                                    score += 200
-
-                            if cell == l:
-                                score += 100
+                        score = self.calculate_score(r, c, d, w)
 
                         if score > ss:
                             available.append((r, c, d, score))
                             ss = 200
-
 
 #            print(w)
 #            print(available)
@@ -69,21 +48,52 @@ class Puzzle:
                     c += chosen[2][1]
                 self.words.append((r, c, d, w))
 
-            if len(self.words) >= total_words:
+            if len(self.words) >= self.total_words:
                 break
 
-        self.legend = {}
+    @property
+    def legend(self):
+        result = {}
         for word in sorted(self.words, key=lambda x: (len(x[3]), x[3])):
             k = len(word[3])
-            if k not in self.legend:
-                self.legend[k] = []
-            self.legend[k].append(word)
+            if k not in result:
+                result[k] = []
+            result[k].append(word)
+        return result
 
 
     def get(self, r, c):
         if r < 0 or c < 0 or r >= self.rows or c >= self.cols:
             return END
         return self.grid[r][c]
+
+    def calculate_score(self, r, c, d, w):
+        if self.get(r - d[0], c - d[1]) != EMPTY:
+            return 0
+
+        if self.get(r + len(w) * d[0] + d[0], c + len(w) * d[1] + d[1]) != EMPTY:
+            return 0
+            
+        score = 0
+        for i, l in enumerate(w):
+            x = r + i * d[0]
+            y = c + i * d[1]
+            cell = self.get(x, y)
+            score += 1
+
+            if cell != EMPTY and cell != l:
+                return 0
+
+            if self.get(x + d[1], y + d[0]) != EMPTY or self.get(x - d[1], y - d[0]) != EMPTY:
+                if cell == EMPTY:
+                    return 0
+                else:
+                    score += 200
+
+            if cell == l:
+                score += 100
+
+        return score
 
 
 
