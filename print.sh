@@ -1,18 +1,18 @@
 #!/bin/bash
 set -e
 
-PARAMS="--rows 35 --cols 33 --max-words 100 -a 15"
+PARAMS="--css-embed"
 DST=./papers
-
-make
 
 [ ! -d "$DST" ] && mkdir -p "$DST"
 
 SEED=$RANDOM
-./crisscross --format html --seed "$SEED" $PARAMS > "$DST/$SEED.html" 
-./crisscross --format html --seed "$SEED" --print-solution $PARAMS > "$DST/${SEED}_solution.html" 
+./criss.py --seed "$SEED" $PARAMS > "$DST/$SEED.html" 
 chromium --headless --disable-gpu --print-to-pdf="$DST/$SEED.pdf" "$DST/$SEED.html"
 
 xdg-open "$DST/$SEED.pdf"
-read
-lp "$DST/$SEED.pdf"
+
+if [ "$1" != "--dry-run" ]; then
+  read
+  lp "$DST/$SEED.pdf"
+fi

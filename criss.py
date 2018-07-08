@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import random
 import locale
 from collections import namedtuple
@@ -139,17 +140,25 @@ def render(template, **kwargs):
 parser = argparse.ArgumentParser()
 parser.add_argument("--words", help="path to file with words separated by newline", default="./words")
 parser.add_argument("--css", default="./style.css")
-parser.add_argument("--css-embed")
+parser.add_argument("--css-embed", help='embed css directly to html', action='store_true')
+parser.add_argument("--rows", default=35, type=int)
+parser.add_argument("--cols", default=31, type=int)
+parser.add_argument("--seed")
 
 options = parser.parse_args()
 
-
 # TODO: why it is not working from ENV?
 locale.setlocale(locale.LC_COLLATE, 'cs_CZ.UTF8')
-random.seed(0)
-p = Puzzle(load_words(options.words), 35, 33)
 
-variables = {}
+if not options.seed:
+    options.seed = random.randint(0, 65000)
+
+random.seed(options.seed)
+p = Puzzle(load_words(options.words), options.rows, options.cols)
+
+variables = {
+        "seed": options.seed
+}
 
 if options.css_embed:
     with open('style.css') as f:
