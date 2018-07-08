@@ -101,7 +101,9 @@ class Puzzle:
                 if cell == EMPTY:
                     return 0
                 else:
-                    score += 600
+                    # penalty for multiple words that matches same place
+                    ambiguous = [item for item in self.words[len(w)] if item.word[i] == l]
+                    score += 600 - 4000 * len(ambiguous)
 
             # shared letter with another word
             if cell == l:
