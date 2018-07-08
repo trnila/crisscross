@@ -18,10 +18,12 @@ class Puzzle:
         self.cols = cols
 
         self.grid = [[EMPTY] * cols for i in range(0, rows)]
+        self.hints = [[False] * cols for i in range(0, rows)]
         self.starts = [[{'right': None, 'down': None} for j in range(cols)] for i in range(rows)]
         self.words = [[] for i in range(0, 20)]
 
         self._generate()
+        self._generate_hints()
         
         for words in self.words:
             words.sort(key=lambda w: locale.strxfrm(w.word))
@@ -29,6 +31,18 @@ class Puzzle:
     @property
     def total_words(self):
         return sum([len(l) for l in self.words])
+
+    def _generate_hints(self):
+        remaining = self.total_words * 0.05
+
+        while remaining > 0:
+            r = random.randint(0, self.rows - 1)
+            c = random.randint(0, self.cols - 1)
+
+            if self.grid[r][c] not in [EMPTY, END]:
+                self.hints[r][c] = True
+                remaining -= 1
+
 
     def _generate(self):
         random.shuffle(self.word_dict)

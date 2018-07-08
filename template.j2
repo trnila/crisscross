@@ -1,14 +1,5 @@
-<html>
-  <head>
-    <meta charset="utf-8">
-    {% if style %}
-      <style>{{ style }}</style>
-    {% elif css %}
-    <link rel="stylesheet" href="{{ css }}">
-    {% endif %}
-  </head>
-  <body>
-    <div class="page">
+{% macro grid(print_solution=False) -%}
+  <div class="page">
       <div class="grid">
         <table>
           {% for row in puzzle.grid %}
@@ -24,14 +15,17 @@
                 </div>
                 {% endif %}
               {% endfor %}
-              {{ l }}
+              {% if print_solution or puzzle.hints[r][c] %}
+                {{ l }}
+              {% else %}
+                &nbsp;
+              {% endif %}
             </td>
             {% endfor %}
           </tr>
           {% endfor %}
         </table>
       </div>
-
       <dl class="words">
         {% for words in puzzle.words %}
         {% if words %}
@@ -52,7 +46,20 @@
           <dt>seed</dt>
           <dd>{{ seed }}</dd>
       </footer>
-
     </div>
+{%- endmacro %}
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% if style %}
+      <style>{{ style }}</style>
+    {% elif css %}
+    <link rel="stylesheet" href="{{ css }}">
+    {% endif %}
+  </head>
+  <body>
+      {{ grid() }}
+      {{ grid(print_solution=True) }}
   </body>
 </html>
