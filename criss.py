@@ -1,4 +1,5 @@
 import random
+import locale
 
 EMPTY = ''
 END = '#'
@@ -16,7 +17,7 @@ class Puzzle:
         self._generate()
         
         for words in self.words:
-            words.sort(key=lambda w: w[3])
+            words.sort(key=lambda w: locale.strxfrm(w[3]))
 
 
     def _generate(self):
@@ -119,6 +120,8 @@ def render(template, **kwargs):
     template = env.get_template(os.path.split(template)[-1])
     return template.render(**kwargs)
 
+# TODO: why it is not working from ENV?
+locale.setlocale(locale.LC_COLLATE, 'cs_CZ.UTF8')
 random.seed(0)
 p = Puzzle(load_words("./words"), 35, 33)
 print(render("template.j2", puzzle=p, style=open("style.css").read()))
