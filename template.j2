@@ -11,9 +11,20 @@
       <div class="grid">
         <table>
           {% for row in puzzle.grid %}
+          {% set r = loop.index0 %}
           <tr>
             {% for l in row %}
-            <td{%if l != '' %} class="cell"{% endif %}>{{ l }}</td>
+            <td{%if l != '' %} class="cell"{% endif %}>
+              {% set c = loop.index0 %}
+              {% for dir in ['right', 'down'] %}
+                {% if puzzle.starts[r][c][dir] %}
+                <div class="letter-count letter-count-{{ dir }}">
+                  {{ puzzle.starts[r][c][dir] }}
+                </div>
+                {% endif %}
+              {% endfor %}
+              {{ l }}
+            </td>
             {% endfor %}
           </tr>
           {% endfor %}

@@ -16,6 +16,7 @@ class Puzzle:
         self.cols = cols
 
         self.grid = [[EMPTY] * cols for i in range(0, rows)]
+        self.starts = [[{'right': None, 'down': None} for j in range(cols)] for i in range(rows)]
         self.words = [[] for i in range(0, 20)]
 
         self._generate()
@@ -49,8 +50,8 @@ class Puzzle:
 #            print(available)
 #            print()
             if available:
-                max_score = max([x[3] for x in available])
-                available = list(filter(lambda w: w[3] == max_score, available))
+                max_score = max([x.score for x in available])
+                available = list(filter(lambda w: w.score == max_score, available))
                 chosen = random.choice(available)
 
                 r = chosen.row
@@ -60,8 +61,12 @@ class Puzzle:
                     r += chosen.dir[0]
                     c += chosen.dir[1]
 
-                self.words[len(w)].append(chosen)
+                self.words[len(chosen.word)].append(chosen)
                 nothing = 0
+
+                label = 'down' if chosen.dir[0] == 1 else 'right' 
+                self.starts[chosen.row][chosen.col][label] = len(chosen.word)
+
             else:
                 nothing += 1
 
