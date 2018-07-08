@@ -68,30 +68,41 @@ class Puzzle:
         return self.grid[r][c]
 
     def calculate_score(self, r, c, d, w):
+        # occupied before word
         if self.get(r - d[0], c - d[1]) != EMPTY:
             return 0
 
+        # occupied after word
         if self.get(r + len(w) * d[0] + d[0], c + len(w) * d[1] + d[1]) != EMPTY:
             return 0
-            
+
         score = 0
         for i, l in enumerate(w):
+            is_first = i == 0
+            is_last = i + 1 == len(w)
+
             x = r + i * d[0]
             y = c + i * d[1]
             cell = self.get(x, y)
             score += 1
 
+            # already occupied by different letter
             if cell != EMPTY and cell != l:
                 return 0
 
+            # neighour cell
             if self.get(x + d[1], y + d[0]) != EMPTY or self.get(x - d[1], y - d[0]) != EMPTY:
                 if cell == EMPTY:
                     return 0
                 else:
-                    score += 200
+                    score += 600
 
+            # shared letter with another word
             if cell == l:
-                score += 100
+                if is_first or is_last:
+                    score += 100
+                else:
+                    score += 200
 
         return score
 
