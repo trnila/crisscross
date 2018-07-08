@@ -1,6 +1,7 @@
 import random
 import locale
 from collections import namedtuple
+import argparse
 
 
 EMPTY = ''
@@ -134,9 +135,27 @@ def render(template, **kwargs):
     template = env.get_template(os.path.split(template)[-1])
     return template.render(**kwargs)
 
+
+parser = argparse.ArgumentParser()
+parser.add_argument("--words", help="path to file with words separated by newline", default="./words")
+parser.add_argument("--css", default="./style.css")
+parser.add_argument("--css-embed")
+
+options = parser.parse_args()
+
+
 # TODO: why it is not working from ENV?
 locale.setlocale(locale.LC_COLLATE, 'cs_CZ.UTF8')
 random.seed(0)
-p = Puzzle(load_words("./words"), 35, 33)
-print(render("template.j2", puzzle=p, style=open("style.css").read()))
+p = Puzzle(load_words(options.words), 35, 33)
+
+variables = {}
+
+if options.css_embed:
+    with open('style.css') as f:
+        variables['style'] = f.read()
+else:
+    variables['css'] = options.css
+
+print(render("template.j2", puzzle=p, **variables)) 
 

@@ -3,12 +3,6 @@
   margin: 0;
 }
 
-@media print {
-  body {
-    border: 0 !important;
-  }
-}
-
 .page {
   width: 210mm;
   height: 297mm;
@@ -38,7 +32,6 @@ td {
   height: 23px;
   min-width: 23px;
   padding: 0;
-  position: relative;
 }
 
 td.cell {
@@ -89,15 +82,15 @@ dd {
 }
 
 .letter-count-down {
-  top: -11px;
-  left: -1px;
   text-align: center;
   width: 25px;
+  margin-top: -13px;
+  margin-left: -1px;
 }
 
 .letter-count-right {
-  left: -22px;
   width: 20px;
   text-align: right;
   padding-top: 3px;
+  margin-left: -23px;
 }

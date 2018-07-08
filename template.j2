@@ -1,12 +1,13 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <style>{{ style }}</style>
+    {% if style %}
+      <style>{{ style }}</style>
+    {% elif css %}
+    <link rel="stylesheet" href="{{ css }}">
+    {% endif %}
   </head>
   <body>
-    <style>
-      .page:after {content: "{{ id }}"}
-    </style>
     <div class="page">
       <div class="grid">
         <table>
