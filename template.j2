@@ -26,7 +26,7 @@
           <dt>{{ loop.index0 }}</dt>
           <dd>
             {% for word in words %}
-              {{ word[3] }}{% if not loop.last %},{% endif %}
+              {{ word.word }}{% if not loop.last %},{% endif %}
             {% endfor %}
         {% endif %}
         {% endfor %}

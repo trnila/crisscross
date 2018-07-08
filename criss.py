@@ -1,9 +1,13 @@
 import random
 import locale
+from collections import namedtuple
+
 
 EMPTY = ''
 END = '#'
 TRIES = 300
+
+Item = namedtuple('Item', ['row', 'col', 'dir', 'score', 'word'])
 
 class Puzzle:
     def __init__(self, words, rows, cols):
@@ -17,7 +21,7 @@ class Puzzle:
         self._generate()
         
         for words in self.words:
-            words.sort(key=lambda w: locale.strxfrm(w[3]))
+            words.sort(key=lambda w: locale.strxfrm(w.word))
 
     @property
     def total_words(self):
@@ -38,7 +42,7 @@ class Puzzle:
                         score = self.calculate_score(r, c, d, w)
 
                         if score > ss:
-                            available.append((r, c, d, score))
+                            available.append(Item(r, c, d, score, w))
                             ss = 200
 
 #            print(w)
@@ -49,14 +53,14 @@ class Puzzle:
                 available = list(filter(lambda w: w[3] == max_score, available))
                 chosen = random.choice(available)
 
-                r = chosen[0]
-                c = chosen[1]
+                r = chosen.row
+                c = chosen.col
                 for l in w:
                     self.grid[r][c] = l
-                    r += chosen[2][0]
-                    c += chosen[2][1]
+                    r += chosen.dir[0]
+                    c += chosen.dir[1]
 
-                self.words[len(w)].append((r, c, d, w))
+                self.words[len(w)].append(chosen)
                 nothing = 0
             else:
                 nothing += 1
