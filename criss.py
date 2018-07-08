@@ -2,13 +2,13 @@ import random
 
 EMPTY = ''
 END = '#'
+TRIES = 300
 
 class Puzzle:
-    def __init__(self, words, rows, cols, total_words):
+    def __init__(self, words, rows, cols):
         self.word_dict = words
         self.rows = rows
         self.cols = cols
-        self.total_words = total_words
 
         self.grid = [[EMPTY] * cols for i in range(0, rows)]
         self.words = []
@@ -20,6 +20,7 @@ class Puzzle:
         dirs = [[1, 0], [0, 1]]
 
         ss = 0
+        nothing = 0
         for w in self.word_dict:
             available = []
 
@@ -47,8 +48,11 @@ class Puzzle:
                     r += chosen[2][0]
                     c += chosen[2][1]
                 self.words.append((r, c, d, w))
+                nothing = 0
+            else:
+                nothing += 1
 
-            if len(self.words) >= self.total_words:
+            if nothing >= TRIES:
                 break
 
     @property
@@ -73,7 +77,7 @@ class Puzzle:
             return 0
 
         # occupied after word
-        if self.get(r + len(w) * d[0] + d[0], c + len(w) * d[1] + d[1]) != EMPTY:
+        if self.get(r + (len(w) - 1) * d[0] + d[0], c + (len(w) - 1) * d[1] + d[1]) != EMPTY:
             return 0
 
         score = 0
@@ -122,6 +126,6 @@ def render(template, **kwargs):
     return template.render(**kwargs)
 
 random.seed(0)
-p = Puzzle(load_words("./words"), 35, 33, 70)
+p = Puzzle(load_words("./words"), 35, 33)
 print(render("template.j2", puzzle=p, style=open("style.css").read()))
 
