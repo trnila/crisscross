@@ -75,11 +75,11 @@ class Puzzle:
 
     def calculate_score(self, r, c, d, w):
         # occupied before word
-        if self.get(r - d[0], c - d[1]) != EMPTY:
+        if self.get(r - d[0], c - d[1]) not in [EMPTY, END]:
             return 0
 
         # occupied after word
-        if self.get(r + (len(w) - 1) * d[0] + d[0], c + (len(w) - 1) * d[1] + d[1]) != EMPTY:
+        if self.get(r + (len(w) - 1) * d[0] + d[0], c + (len(w) - 1) * d[1] + d[1]) not in [EMPTY, END]:
             return 0
 
         score = 0
