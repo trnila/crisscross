@@ -11,9 +11,13 @@ class Puzzle:
         self.cols = cols
 
         self.grid = [[EMPTY] * cols for i in range(0, rows)]
-        self.words = []
+        self.words = [[] for i in range(0, 20)]
 
         self._generate()
+        
+        for words in self.words:
+            words.sort(key=lambda w: w[3])
+
 
     def _generate(self):
         random.shuffle(self.word_dict)
@@ -47,24 +51,14 @@ class Puzzle:
                     self.grid[r][c] = l
                     r += chosen[2][0]
                     c += chosen[2][1]
-                self.words.append((r, c, d, w))
+
+                self.words[len(w)].append((r, c, d, w))
                 nothing = 0
             else:
                 nothing += 1
 
             if nothing >= TRIES:
                 break
-
-    @property
-    def legend(self):
-        result = {}
-        for word in sorted(self.words, key=lambda x: (len(x[3]), x[3])):
-            k = len(word[3])
-            if k not in result:
-                result[k] = []
-            result[k].append(word)
-        return result
-
 
     def get(self, r, c):
         if r < 0 or c < 0 or r >= self.rows or c >= self.cols:

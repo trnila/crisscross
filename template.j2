@@ -1,0 +1,37 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>{{ style }}</style>
+  </head>
+  <body>
+    <style>
+      .page:after {content: "{{ id }}"}
+    </style>
+    <div class="page">
+      <div class="grid">
+        <table>
+          {% for row in puzzle.grid %}
+          <tr>
+            {% for l in row %}
+            <td{%if l != '' %} class="cell"{% endif %}>{{ l }}</td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+
+      <dl class="words">
+        {% for words in puzzle.words %}
+        {% if words %}
+          <dt>{{ loop.index0 }}</dt>
+          <dd>
+            {% for word in words %}
+              {{ word[3] }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endfor %}
+      </dl>
+
+    </div>
+  </body>
+</html>
