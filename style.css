@@ -9,15 +9,22 @@
   }
 }
 
-html, body {
+.page {
   width: 210mm;
   height: 297mm;
-}
-
-
-body {
   border: 1px solid black;
   padding: 10px;
+  position: relative;
+  border: 1px solid black;
+}
+
+footer {
+  position: absolute;
+  bottom: 10px;
+  color: #6c757d;
+}
+
+body {
   font-size: 16px;
 }
 

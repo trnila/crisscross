@@ -19,6 +19,9 @@ class Puzzle:
         for words in self.words:
             words.sort(key=lambda w: locale.strxfrm(w[3]))
 
+    @property
+    def total_words(self):
+        return sum([len(l) for l in self.words])
 
     def _generate(self):
         random.shuffle(self.word_dict)
