@@ -1,24 +1,36 @@
+* {
+  box-sizing: border-box;
+}
+
 @page {
   size: A4;
   margin: 0;
 }
 
 @media print {
-  body {
-    border: 0 !important;
+  .page {
+    border: 0;
   }
 }
 
-html, body {
+.page {
   width: 210mm;
   height: 297mm;
+  border: 1px solid black;
+  padding: 30px;
+  position: relative;
+  border: 1px solid black;
 }
 
+footer {
+  position: absolute;
+  bottom: 10px;
+  color: #6c757d;
+}
 
 body {
-  border: 1px solid black;
-  padding: 10px;
   font-size: 16px;
+  margin: 0px;
 }
 
 table {
@@ -37,4 +49,72 @@ td.cell {
   border: 1px solid black;
   text-align: center;
   background: #e4e4e4;
+}
+
+/*
+dd:after {
+  content: "";
+  display: block;
+}
+
+dt {
+  text-align: right;
+  display: inline-block;
+  width: 20px;
+  font-weight: bold;
+}
+
+dd {
+  display: inline;
+  -webkit-margin-start: 0px;
+}
+*/
+
+dl.words {
+  display: grid;
+  grid-template-columns: max-content auto;
+}
+
+dl.words dt {
+  grid-column-start: 1;
+  text-align: right;
+  font-weight: bold;
+}
+
+dl.words dd {
+  grid-column-start: 2;
+  -webkit-margin-start: 5px;
+}
+
+footer dt, footer dd {
+  display: inline;
+  -webkit-margin-start: 5px;
+}
+
+footer dd {
+  margin-right: 40px;
+}
+
+footer dt:after {
+  content: ':'
+}
+
+.letter-count {
+  font-size: 10px;
+  color: #6c757d;
+  position: absolute;
+}
+
+.letter-count-down {
+  text-align: center;
+  width: 25px;
+  margin-top: -13px;
+  margin-left: -1px;
+}
+
+.letter-count-right {
+  width: 20px;
+  text-align: right;
+  padding-top: 3px;
+  margin-left: -23px;
 }

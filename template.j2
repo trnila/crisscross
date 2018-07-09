@@ -1,0 +1,65 @@
+{% macro grid(print_solution=False) -%}
+  <div class="page">
+      <div class="grid">
+        <table>
+          {% for row in puzzle.grid %}
+          {% set r = loop.index0 %}
+          <tr>
+            {% for l in row %}
+            <td{%if l != '' %} class="cell"{% endif %}>
+              {% set c = loop.index0 %}
+              {% for dir in ['right', 'down'] %}
+                {% if puzzle.starts[r][c][dir] %}
+                <div class="letter-count letter-count-{{ dir }}">
+                  {{ puzzle.starts[r][c][dir] }}
+                </div>
+                {% endif %}
+              {% endfor %}
+              {% if print_solution or puzzle.hints[r][c] %}
+                {{ l }}
+              {% else %}
+                &nbsp;
+              {% endif %}
+            </td>
+            {% endfor %}
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <dl class="words">
+        {% for words in puzzle.words %}
+        {% if words %}
+          <dt>{{ loop.index0 }}</dt>
+          <dd>
+            {% for word in words %}
+              {{ word.word }}{% if not loop.last %},{% endif %}
+            {% endfor %}
+        {% endif %}
+        {% endfor %}
+      </dl>
+
+      <footer>
+        <dl>
+          <dt>počet slov</dt>
+          <dd>{{ puzzle.total_words }}</dd>
+
+          <dt>seed</dt>
+          <dd>{{ seed }}</dd>
+      </footer>
+    </div>
+{%- endmacro %}
+
+<html>
+  <head>
+    <meta charset="utf-8">
+    {% if style %}
+      <style>{{ style }}</style>
+    {% elif css %}
+    <link rel="stylesheet" href="{{ css }}">
+    {% endif %}
+  </head>
+  <body>
+      {{ grid() }}
+      {{ grid(print_solution=True) }}
+  </body>
+</html>
