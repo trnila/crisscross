@@ -14,5 +14,5 @@ xdg-open "$DST/$SEED.pdf"
 
 if [ "$1" != "--dry-run" ]; then
   read
-  lp "$DST/$SEED.pdf"
+  lp "$DST/$SEED.pdf" -P 1
 fi
