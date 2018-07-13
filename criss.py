@@ -3,6 +3,7 @@ import random
 import locale
 from collections import namedtuple
 import argparse
+import os
 
 
 EMPTY = ''
@@ -158,6 +159,7 @@ parser.add_argument("--css-embed", help='embed css directly to html', action='st
 parser.add_argument("--rows", default=35, type=int)
 parser.add_argument("--cols", default=31, type=int)
 parser.add_argument("--seed")
+parser.add_argument('--serialize', help='puzzle object will be serialized to this file')
 
 options = parser.parse_args()
 
@@ -181,4 +183,15 @@ else:
     variables['css'] = options.css
 
 print(render("template.j2", puzzle=p, **variables)) 
+
+if options.serialize:
+    import pickle
+
+    try:
+        os.mkdir(os.path.dirname(options.serialize))
+    except FileExistsError as e:
+        pass
+
+    with open(options.serialize, "wb") as f:
+        pickle.dump(p, f)
 
